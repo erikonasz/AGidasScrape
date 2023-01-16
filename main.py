@@ -12,27 +12,30 @@ driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
 driver.get("https://autogidas.lt/en/skelbimai/automobiliai/porsche/")
 
 soup = BeautifulSoup(driver.page_source, 'html.parser')
+time.sleep(4)
+accept_cookies = driver.find_element(By.XPATH, '//button[text()="I Accept"]')
+accept_cookies.click()
+time.sleep(3)
 
 cars = []
-
-
 total_cars = 0
+
 while True:
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    cars_on_page = soup.find_all('article', class_='list-item')
+    allcars = soup.find_all('article', class_='list-item')
 
-    for car in cars_on_page:
+    for car in allcars:
         title = car.find('h2', class_='item-title').text
         price = car.find('div', class_='item-price').text
         cars.append({'title': title, 'price': price})
         total_cars += 1
-    next_page_button = driver.find_elements(By.XPATH, ("//a[@class='next']"))
+    next_page_button = driver.find_elements(By.XPATH, ("//div[@class='next-page-inner']"))
     if not next_page_button:
         break
     else:
         next_page_button[0].click()
         time.sleep(3)
-    print(len(cars))
 
 print("Total number of cars: ", len(cars))
+print("Cars list: ", cars)
