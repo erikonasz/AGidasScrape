@@ -1,12 +1,11 @@
 import time
-
 import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
-import json
 from bs4 import BeautifulSoup
+import csv
+
 
 driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
 driver.get("https://autogidas.lt/en/skelbimai/automobiliai/porsche/")
@@ -39,3 +38,13 @@ while True:
 
 print("Total number of cars: ", len(cars))
 print("Cars list: ", cars)
+
+with open('cars.csv', mode='w', newline='') as csv_file:
+    fieldnames = ['title', 'price']
+    wrt = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    wrt.writeheader()
+
+    for car in cars:
+        car['title'] = car['title'].strip()
+        car['title'] = car['title'].strip()
+        wrt.writerow(car)
