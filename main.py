@@ -47,7 +47,7 @@ def get_cars(url):
                     year = "N/A"
 
                 transmission = description_list[3].strip()[:10]
-                transmission = re.sub(r'(Automatic)(\d+)', r'\1', transmission)
+                transmission = re.sub(r'(Automatic.*)', r'Automatic', transmission)
                 if len(transmission) > 10:
                     transmission = "N/A"
                 city = description_list[-1].strip()
