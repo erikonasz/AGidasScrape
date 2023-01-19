@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+import re
 import csv
 
 def get_cars(url):
@@ -17,6 +18,7 @@ def get_cars(url):
 
     cars = []
     counter = 0
+    electricity_cars_count = 0
 
     while True:
         soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -26,18 +28,38 @@ def get_cars(url):
             title = car.find('h2', class_='item-title').text
             price = car.find('div', class_='item-price').text
             description = car.find('div', class_='item-description').text
-            description_list = description.split(',')
+            if "Electricity" in description:
+                electricity_cars_count += 1
+                continue
+            description_list = list(filter(None, map(str.strip, ''.join(description.splitlines()).split(','))))
 
-            liter = description_list[0].strip()
-            fuel_type = description_list[1].strip()
-            year = description_list[2].strip()
-            transmission = description_list[3].strip()
-            try:
-                engine = description_list[4].strip()
-            except:
-                print("Engine info (4 list) not found.")
+            if len(description_list) >= 5:
+                liter = description_list[0].strip()[:3]
+                if len(liter) > 3:
+                    liter = "N/A"
 
-            cars.append({'title': title, 'price': price, 'liter': liter, 'fuel_type': fuel_type, 'year': year, 'transmission': transmission, 'engine': engine})
+                fuel_type = description_list[1].strip()
+                if len(fuel_type) > 12:
+                    fuel_type = "N/A"
+
+                year = description_list[2].strip()[:4]
+                if len(year) > 7:
+                    year = "N/A"
+
+                transmission = description_list[3].strip()[:10]
+                transmission = re.sub(r'(Automatic)(\d+)', r'\1', transmission)
+                if len(transmission) > 10:
+                    transmission = "N/A"
+                city = description_list[-1].strip()
+
+            else:
+                liter = "N/A"
+                fuel_type = "N/A"
+                year = "N/A"
+                transmission = "N/A"
+                city = "N/A"
+
+            cars.append({'title': title, 'price': price, 'liter': liter, 'fuel_type': fuel_type, 'year': year, 'transmission': transmission, 'city': city})
             counter += 1
             if counter >= count_cars:
                 break
@@ -51,12 +73,13 @@ def get_cars(url):
             time.sleep(3)
 
     print("Number of cars scraped: ", len(cars))
+    print("Skipped electric cars: ", electricity_cars_count)
     print("Cars list: ", cars)
     return cars
 
 def write_to_csv(cars):
     with open('cars.csv', mode='w', newline='') as csv_file:
-        fieldnames = ['title', 'price', 'liter', 'fuel_type', 'year', 'transmission', 'engine']
+        fieldnames = ['title', 'price', 'liter', 'fuel_type', 'year', 'transmission', 'city']
         wrt = csv.DictWriter(csv_file, fieldnames=fieldnames)
         wrt.writeheader()
 
@@ -65,7 +88,7 @@ def write_to_csv(cars):
             car['price'] = car['price'].strip()
             wrt.writerow(car)
 
-url = "https://autogidas.lt/en/skelbimai/automobiliai/porsche/"
-count_cars = 40
+url = "https://autogidas.lt/en/skelbimai/automobiliai/?f_1%5B0%5D=BMW&f_model_14%5B0%5D=520&f_215=&f_216=&f_41=&f_42=&f_376="
+count_cars = 100
 cars = get_cars(url)
 write_to_csv(cars)
