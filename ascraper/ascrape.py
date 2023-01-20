@@ -1,5 +1,4 @@
 import time
-import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -7,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 import csv
 
-def get_cars(url):
+def get_cars(url, count_cars):
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
     driver.get(url)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -87,8 +86,11 @@ def write_to_csv(cars):
             car['title'] = car['title'].strip()
             car['price'] = car['price'].strip()
             wrt.writerow(car)
+def main():
+    url = "https://autogidas.lt/en/skelbimai/automobiliai/?f_1%5B0%5D=BMW&f_model_14%5B0%5D=520&f_215=&f_216=&f_41=&f_42=&f_376="
+    count_cars = 100
+    cars = get_cars(url,count_cars)
+    write_to_csv(cars)
 
-url = "https://autogidas.lt/en/skelbimai/automobiliai/?f_1%5B0%5D=BMW&f_model_14%5B0%5D=520&f_215=&f_216=&f_41=&f_42=&f_376="
-count_cars = 100
-cars = get_cars(url)
-write_to_csv(cars)
+if __name__ == '__main__':
+    main()
