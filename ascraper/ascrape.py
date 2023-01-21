@@ -71,8 +71,8 @@ def get_cars(url, count_cars):
             next_page_button[0].click()
             time.sleep(3)
 
-    print("Number of cars scraped: ", len(cars))
-    print("Skipped electric cars: ", electricity_cars_count)
+    print("Cars scraped: ", len(cars))
+    print("Skipped electric cars:  ", electricity_cars_count)
     print("Cars list: ", cars)
     return cars
 
