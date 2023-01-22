@@ -92,5 +92,3 @@ def main():
     cars = get_cars(url,count_cars)
     write_to_csv(cars)
 
-if __name__ == '__main__':
-    main()
