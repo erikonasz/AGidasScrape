@@ -25,7 +25,7 @@ def get_cars(url, count_cars):
 
         for car in allcars:
             title = car.find('h2', class_='item-title').text
-            price = car.find('div', class_='item-price').text
+            price = re.sub("[^0-9]", "", car.find('div', class_='item-price').text)
             description = car.find('div', class_='item-description').text
             if "Electricity" in description:
                 electricity_cars_count += 1
@@ -88,7 +88,7 @@ def write_to_csv(cars):
             wrt.writerow(car)
 def main():
     url = "https://autogidas.lt/en/skelbimai/automobiliai/?f_1%5B0%5D=BMW&f_model_14%5B0%5D=520&f_215=&f_216=&f_41=&f_42=&f_376="
-    count_cars = 100
+    count_cars = 4
     cars = get_cars(url,count_cars)
     write_to_csv(cars)
-
+main()
