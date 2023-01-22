@@ -1,0 +1,2 @@
+[console_scripts]
+AGidasScraper = AGidasScraper.ascrape:main

@@ -1,0 +1,9 @@
+setup.py
+AGidasScraper.egg-info/PKG-INFO
+AGidasScraper.egg-info/SOURCES.txt
+AGidasScraper.egg-info/dependency_links.txt
+AGidasScraper.egg-info/entry_points.txt
+AGidasScraper.egg-info/requires.txt
+AGidasScraper.egg-info/top_level.txt
+ascraper/__init__.py
+ascraper/ascrape.py
