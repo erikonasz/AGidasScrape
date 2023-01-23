@@ -8,7 +8,7 @@
 ### How to use it
 
 At the bottom of the code, in the **main()** function
-'''
+'''Python
 def main():
     url = "Your AutoGidas url with cars list. Example - https://autogidas.lt/en/skelbimai/automobiliai/bmw/"
     count_cars = The number of cars to scrape.
