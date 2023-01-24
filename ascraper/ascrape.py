@@ -81,7 +81,7 @@ def get_cars(url, count_cars):
 
     print("Cars scraped: ", len(cars))
     print("Skipped electric cars:  ", electricity_cars_count)
-    print("Cars list: ", cars)
+    print("Caars list: ", cars)
     return cars
 
 def write_to_csv(cars, chunk_size=1000):
