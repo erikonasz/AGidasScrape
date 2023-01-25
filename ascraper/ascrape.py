@@ -7,6 +7,7 @@ import re
 import json
 import csv
 
+non_latin_char = re.compile(r'[^\x00-\x7F]+')
 
 def get_cars(url, count_cars):
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
